@@ -30,7 +30,7 @@ namespace Application.UseCases.Auth.Commands.Authenticate
             }
 
             var token = _tokenService.GenerateToken(user.Id.ToString(), user.Email, user.Role);
-            return new AuthenticateUserResponse { Token = token };
+            return new AuthenticateUserResponse { AccessToken = token };
         }
     }
 }

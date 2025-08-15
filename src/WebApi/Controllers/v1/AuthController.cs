@@ -7,7 +7,7 @@ using System.Net.Mime;
 namespace WebApi.Controllers.v1
 {
     [ApiController]
-    [Route("api/v1/login")]
+    [Route("api/v1/auth")]
     public class AuthController : MainController
     {
         private readonly IMediator _mediator;
@@ -18,7 +18,7 @@ namespace WebApi.Controllers.v1
         }
 
         /// <summary>
-        /// Login
+        /// Auth
         /// </summary>
         /// <param name="command"></param>
         /// <param name="cancellationToken"></param>
@@ -27,7 +27,7 @@ namespace WebApi.Controllers.v1
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthenticateUserResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Login(AuthenticateUserCommand command, CancellationToken cancellationToken)
+        public async Task<IActionResult> Auth(AuthenticateUserCommand command, CancellationToken cancellationToken)
         {
             var token = await _mediator.Send(command);
             if (token == null)
@@ -36,5 +36,7 @@ namespace WebApi.Controllers.v1
             }
             return Ok(token);
         }
+
+        // TODO: create refreshtoken
     }
 }
