@@ -1,8 +1,10 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Repositories;
+using Domain.Aggregates.UserAggregate;
 using Infrastructure.Persistence.Context;
 using Infrastructure.Persistence.Repositories;
 using Infrastructure.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,19 +18,14 @@ namespace Infrastructure
             // Configure the DbContext
             services.AddDbContext<AppDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("PostgresConnection")));
 
-
-
             // Register the repositories
             services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
             services.AddScoped<IUserRepository, UserRepository>();
 
             // Register the Services
-            services.AddScoped<IApplicationUserService, ApplicationUserService>();
-
-            // Register migration service
-            // services.AddTransient<IMigration, SeedUsersMigration>();
-
-            // TODO: Configure migrations
+            services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
             return services;
         }

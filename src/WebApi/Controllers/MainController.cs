@@ -1,22 +1,19 @@
-﻿using Application.Common.Interfaces;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 
 namespace WebApi.Controllers
 {
     public abstract class MainController : ControllerBase
     {
-        protected MainController(IApplicationUserService appUser)
+        protected CultureInfo Culture
         {
-            if (!appUser.IsAuthenticated) return;
-
-            UserId = int.TryParse(appUser.UserId, out var userId) ? userId : 0; ;
-            Culture = !string.IsNullOrEmpty(appUser.Locale) ? new CultureInfo(appUser.Locale) : new CultureInfo("pt-BR");
-            UserLogged = true;
+            get
+            {
+                var locale = User?.FindFirst("Locale")?.Value;
+                return !string.IsNullOrEmpty(locale) ? new CultureInfo(locale) : new CultureInfo("pt-BR");
+            }
         }
 
-        protected int UserId { get; set; }
-        protected CultureInfo Culture { get; set; }
-        protected bool UserLogged { get; set; }
+        protected bool UserLogged => User?.Identity?.IsAuthenticated ?? false;
     }
 }

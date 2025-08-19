@@ -1,10 +1,11 @@
-﻿using MediatR;
+﻿using Application.UseCases.Auth.Commands.CreateRefreshToken;
+using MediatR;
 
 namespace Application.UseCases.Auth.Commands.Authenticate
 {
-    public class AuthenticateUserCommand : IRequest<AuthenticateUserResponse>
+    public class AuthenticateUserCommand : IRequest<CreateRefreshTokenResponse>
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
     }
 }

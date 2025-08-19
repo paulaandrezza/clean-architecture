@@ -13,6 +13,7 @@ public class User : BaseEntity, IAggregateRoot
     public Role Role { get; set; }
     public UserInfo? UserInfo { get; set; }
     public DateTime CreatedAt { get; set; }
+    public List<RefreshToken> RefreshTokens { get; set; } = new();
 
     public User(string name, string email, string password, Role role, UserInfo? userInfo, DateTime createdAt)
     {

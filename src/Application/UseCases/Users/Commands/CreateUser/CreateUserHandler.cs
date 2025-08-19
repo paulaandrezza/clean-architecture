@@ -1,24 +1,21 @@
-﻿using Application.Common.Interfaces;
-using Application.Common.Mappings.Users;
+﻿using Application.Common.Mappings.Users;
 using Application.Common.Repositories;
 using Domain.Aggregates.UserAggregate;
 using Domain.Exceptions;
-using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.UseCases.Users.Commands.CreateUser
 {
     public class CreateUserHandler : IRequestHandler<CreateUserCommand, CreateUserResponse>
     {
         private readonly IUserRepository _userRepository;
-        private readonly IValidator<CreateUserCommand> _validator;
-        private readonly IPasswordHasher _bcryptPasswordHasher;
+        private readonly IPasswordHasher<User> _passwordHasher;
 
-        public CreateUserHandler(IUserRepository userRepository, IValidator<CreateUserCommand> validator, IPasswordHasher bcryptPasswordHasher)
+        public CreateUserHandler(IUserRepository userRepository, IPasswordHasher<User> passwordHasher)
         {
             _userRepository = userRepository;
-            _validator = validator;
-            _bcryptPasswordHasher = bcryptPasswordHasher;
+            _passwordHasher = passwordHasher;
         }
 
         public async Task<CreateUserResponse> Handle(CreateUserCommand request, CancellationToken cancellationToken)
@@ -28,7 +25,7 @@ namespace Application.UseCases.Users.Commands.CreateUser
             if (existingUser != null)
                 throw new ConflictException($"The email '{request.User.Email}' is already in use.");
 
-            string hashedPassword = _bcryptPasswordHasher.HashPassword(request.User.Password);
+            string hashedPassword = _passwordHasher.HashPassword(null, request.User.Password);
             var user = new User
             (
                 request.User.Name,

@@ -1,6 +1,6 @@
-﻿namespace Application.UseCases.Auth.Commands.Authenticate;
+﻿namespace Application.UseCases.Auth.Commands.CreateRefreshToken;
 
-public class AuthenticateUserResponse
+public class CreateRefreshTokenResponse
 {
     public string AccessToken { get; set; } = string.Empty;
     public string RefreshToken { get; set; } = string.Empty;

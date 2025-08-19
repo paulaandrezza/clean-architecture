@@ -9,7 +9,7 @@ public static class AuthConfig
     public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
         var jwtSettings = configuration.GetSection("JwtSettings");
-        var secretKey = jwtSettings.GetValue<string>("Secret");
+        var secretKey = jwtSettings.GetValue<string>("SecretKey");
 
         if (string.IsNullOrEmpty(secretKey))
             throw new InvalidOperationException("JWT Secret key is required");
@@ -23,13 +23,14 @@ public static class AuthConfig
         {
             options.TokenValidationParameters = new TokenValidationParameters
             {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
+                ValidateIssuer = true,
                 ValidIssuer = jwtSettings["Issuer"],
+                ValidateAudience = true,
                 ValidAudience = jwtSettings["Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
             };
         });
 

@@ -1,5 +1,4 @@
-﻿using Application.Common.Interfaces;
-using Application.UseCases.Users.Commands.CreateUser;
+﻿using Application.UseCases.Users.Commands.CreateUser;
 using Application.UseCases.Users.Queries.GetAllUsers;
 using Application.UseCases.Users.Queries.GetUserById;
 using MediatR;
@@ -15,7 +14,7 @@ namespace WebApi.Controllers.v1
     {
         private readonly IMediator _mediator;
 
-        public UsersController(IApplicationUserService appUser, IMediator mediator) : base(appUser)
+        public UsersController(IMediator mediator) : base()
         {
             _mediator = mediator;
         }
@@ -42,8 +41,8 @@ namespace WebApi.Controllers.v1
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        [Authorize]
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetAllUsersResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
@@ -60,8 +59,8 @@ namespace WebApi.Controllers.v1
         /// <param name="userId"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        [Authorize]
         [HttpGet("{userId}")]
+        [Authorize]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetUserByIdResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
